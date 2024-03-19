@@ -3,9 +3,7 @@ package transport
 import (
 	"Tasks_Users_Vk_test/internal/domain"
 	"Tasks_Users_Vk_test/internal/repository"
-	"Tasks_Users_Vk_test/pkg/util"
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 )
@@ -18,19 +16,6 @@ func NewQuestHandler(repos *repository.Repositories) *QuestHandler {
 	return &QuestHandler{
 		Repos: repos,
 	}
-}
-
-func (q *QuestHandler) GetQuest(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	questId := util.MustAtoi(vars["id"])
-	//quest, err := q.Repos.Quest.GetQuestById(questId)
-	cost, err := q.Repos.Quest.GetCost(questId)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	json.NewEncoder(w).Encode(cost)
 }
 
 func (q *QuestHandler) CreateQuest(w http.ResponseWriter, r *http.Request) {

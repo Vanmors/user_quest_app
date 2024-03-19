@@ -3,10 +3,7 @@ package transport
 import (
 	"Tasks_Users_Vk_test/internal/domain"
 	"Tasks_Users_Vk_test/internal/repository"
-	"Tasks_Users_Vk_test/pkg/util"
 	"encoding/json"
-	"github.com/gorilla/mux"
-	"log"
 	"net/http"
 )
 
@@ -20,17 +17,15 @@ func NewUserHandler(repos *repository.Repositories) *UserHandler {
 	}
 }
 
-func (u *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	userId := util.MustAtoi(vars["id"])
-	user, err := u.Repos.User.GetUserById(userId)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	json.NewEncoder(w).Encode(user)
-}
-
+// CreateUser создает нового пользователя.
+// @Summary Создание пользователя
+// @Description Создает нового пользователя в системе
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param user body CreateUserRequest true "Данные нового пользователя"
+// @Success 201 {object} UserResponse
+// @Router /users [post]
 func (u *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var user domain.User
 	err := json.NewDecoder(r.Body).Decode(&user)

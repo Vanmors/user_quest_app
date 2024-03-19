@@ -11,8 +11,6 @@ import (
 	"net/http"
 )
 
-// @title User_Quests API
-
 func main() {
 
 	// загружаем файл конфигурации
@@ -46,10 +44,8 @@ func main() {
 
 	router := mux.NewRouter()
 
-	router.HandleFunc("/users/{id:[0-9]+}", handlerUser.GetUser).Methods("GET")
 	router.HandleFunc("/users", handlerUser.CreateUser).Methods("POST")
 	router.HandleFunc("/quest", handlerQuest.CreateQuest).Methods("POST")
-	router.HandleFunc("/quest/{id:[0-9]+}", handlerQuest.GetQuest).Methods("GET")
 	router.HandleFunc("/complete", handlerCompletedTask.CompleteTask).Methods("POST")
 	router.HandleFunc("/complete/{id:[0-9]+}", handlerCompletedTask.GetCompletedQuestsAndBalance).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8000", router))

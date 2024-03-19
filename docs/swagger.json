@@ -1,8 +1,0 @@
-{
-    "swagger": "2.0",
-    "info": {
-        "title": "User_Quests API",
-        "contact": {}
-    },
-    "paths": {}
-}

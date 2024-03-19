@@ -16,13 +16,11 @@ PostgeSQL
 
 
 ## Инструкция по запуску приложения
-1. Указать конфигурацию базы данных в файле [config](./config/config.yml) 
-и [docker-compose](./docker-compose.yml)
-2. Создать контейнер
+1. Сначала нужно создать контейнер
 ```ssh
 docker-compose up --build user_quest_app
 ```
-3. Перезапустить контейнер
+2. После перезапустить контейнер
 ```ssh
 docker-compose up user_quest_app
 ```

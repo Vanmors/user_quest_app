@@ -1,6 +1,3 @@
--- CREATE USER docker;
--- CREATE DATABASE docker;
--- GRANT ALL PRIVILEGES ON DATABASE docker TO docker;
 Create Table IF NOT EXISTS users(
     id serial PRIMARY KEY,
     name VARCHAR(255),

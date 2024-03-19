@@ -1,6 +1,6 @@
 database:
-  username: "your_username"
-  password: "your_password"
-  dbname: "your_database_name"
-  host: "localhost"
+  username: "postgres"
+  password: "nav461"
+  dbname: "VK_test_GOPHP"
+  host: "db"
   port: "5432"
