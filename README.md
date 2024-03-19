@@ -24,3 +24,5 @@ docker-compose up --build user_quest_app
 ```ssh
 docker-compose up user_quest_app
 ```
+3. Дальше вы можете отправлять запросы локально используя порт 8000
+по урлам указанным в [main](./cmd/main.go)
