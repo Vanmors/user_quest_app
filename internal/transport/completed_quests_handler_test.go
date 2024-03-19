@@ -2,9 +2,11 @@ package transport
 
 import (
 	"Tasks_Users_Vk_test/internal/domain"
-	"Tasks_Users_Vk_test/internal/repository"
-	mock_repository "Tasks_Users_Vk_test/internal/repository/mocks"
+	repository2 "Tasks_Users_Vk_test/internal/repository"
+	"Tasks_Users_Vk_test/internal/service"
+	mock_service "Tasks_Users_Vk_test/internal/service/mocks"
 	"bytes"
+	"fmt"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 	"net/http"
@@ -12,26 +14,29 @@ import (
 	"testing"
 )
 
-func TestUserHandler_CreateUser(t *testing.T) {
-	type mockBehavior func(s *mock_repository.MockUser, user domain.User)
+func TestCompletedQuestsHandler_CompleteTask(t *testing.T) {
+	type mockBehavior func(s *mock_service.MockCompletedQuests, record domain.RecordCompleted)
 
 	testTable := []struct {
 		name                string
 		inputBody           string
-		inputUser           domain.User
+		inputRecord         domain.RecordCompleted
 		mockBehavior        mockBehavior
 		expectedStatusCode  int
 		expectedRequestBody string
 	}{
 		{
 			name:      "OK",
-			inputBody: `{"name": "Test", "balance": 1000}`,
-			inputUser: domain.User{
-				Name:    "Test",
-				Balance: 1000,
+			inputBody: `{"userID": 1, "questID": 1}`,
+			inputRecord: domain.RecordCompleted{
+				UserID:  1,
+				QuestID: 1,
 			},
-			mockBehavior: func(s *mock_repository.MockUser, user domain.User) {
-				s.EXPECT().CreateUser(user).Return(nil)
+			mockBehavior: func(s *mock_service.MockCompletedQuests, record domain.RecordCompleted) {
+				s.EXPECT().CompleteTask(domain.RecordCompleted{
+					UserID:  1,
+					QuestID: 1,
+				}).Return(nil)
 			},
 			expectedStatusCode:  http.StatusCreated,
 			expectedRequestBody: "",
@@ -39,14 +44,14 @@ func TestUserHandler_CreateUser(t *testing.T) {
 		{
 			name:                "Empty fields",
 			inputBody:           `{}`,
-			mockBehavior:        func(s *mock_repository.MockUser, user domain.User) {},
+			mockBehavior:        func(s *mock_service.MockCompletedQuests, record domain.RecordCompleted) {},
 			expectedStatusCode:  http.StatusBadRequest,
 			expectedRequestBody: `{"error":"fields are required"}` + "\n",
 		},
 		{
 			name:                "Incorrect fields",
 			inputBody:           `{"n": }`,
-			mockBehavior:        func(s *mock_repository.MockUser, user domain.User) {},
+			mockBehavior:        func(s *mock_service.MockCompletedQuests, record domain.RecordCompleted) {},
 			expectedStatusCode:  http.StatusBadRequest,
 			expectedRequestBody: `{"error":"invalid request body"}` + "\n",
 		},
@@ -57,21 +62,25 @@ func TestUserHandler_CreateUser(t *testing.T) {
 			c := gomock.NewController(t)
 			defer c.Finish()
 
-			user := mock_repository.NewMockUser(c)
-			testCase.mockBehavior(user, testCase.inputUser)
+			record := mock_service.NewMockCompletedQuests(c)
+			testCase.mockBehavior(record, testCase.inputRecord)
 
-			repository := &repository.Repositories{User: user}
-			handler := NewUserHandler(repository)
+			repository := &repository2.Repositories{}
+			service := &service.Services{CompletedQuests: record}
+
+			handler := NewCompletedQuestsHandler(repository, service)
 
 			rr := httptest.NewRecorder()
 
 			// Создание фейкового http.Request с телом запроса
 			reqBody := bytes.NewBufferString(testCase.inputBody)
-			req := httptest.NewRequest(http.MethodPost, "/users", reqBody)
+			req := httptest.NewRequest(http.MethodPost, "/complete", reqBody)
 
 			// Вызов обработчика с фейковыми объектами http.ResponseWriter и http.Request
-			handler.CreateUser(rr, req)
+			handler.CompleteTask(rr, req)
 
+			fmt.Println("Actual response body:", rr.Body.String())
+			fmt.Println("Expected response body:", testCase.expectedRequestBody)
 			require.Equal(t, testCase.expectedStatusCode, rr.Code)
 			require.Equal(t, testCase.expectedRequestBody, rr.Body.String())
 

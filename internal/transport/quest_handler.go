@@ -14,7 +14,7 @@ type QuestHandler struct {
 	Repos *repository.Repositories
 }
 
-func NewQuestService(repos *repository.Repositories) *QuestHandler {
+func NewQuestHandler(repos *repository.Repositories) *QuestHandler {
 	return &QuestHandler{
 		Repos: repos,
 	}

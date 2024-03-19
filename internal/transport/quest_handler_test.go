@@ -7,13 +7,14 @@ import (
 	"bytes"
 	"github.com/golang/mock/gomock"
 	"github.com/magiconair/properties/assert"
+	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
 
 func TestQuestHandler_CreateQuest(t *testing.T) {
-	type mockBehavior func(s *mock_repository.MockQuest, quest domain.Quest)
+	type mockBehavior func(r *mock_repository.MockQuest, quest domain.Quest)
 
 	testTable := []struct {
 		name                string
@@ -31,8 +32,8 @@ func TestQuestHandler_CreateQuest(t *testing.T) {
 				Cost:   1000,
 				Stages: 2,
 			},
-			mockBehavior: func(s *mock_repository.MockQuest, quest domain.Quest) {
-				s.EXPECT().CreateQuest(quest).Return(nil)
+			mockBehavior: func(r *mock_repository.MockQuest, quest domain.Quest) {
+				r.EXPECT().CreateQuest(quest).Return(nil)
 			},
 			expectedStatusCode:  http.StatusCreated,
 			expectedRequestBody: "",
@@ -40,16 +41,16 @@ func TestQuestHandler_CreateQuest(t *testing.T) {
 		{
 			name:                "Empty fields",
 			inputBody:           `{}`,
-			mockBehavior:        func(s *mock_repository.MockQuest, quest domain.Quest) {},
+			mockBehavior:        func(r *mock_repository.MockQuest, quest domain.Quest) {},
 			expectedStatusCode:  http.StatusBadRequest,
-			expectedRequestBody: `{"error": "fields are required"}`,
+			expectedRequestBody: `{"error":"fields are required"}` + "\n",
 		},
 		{
 			name:                "Incorrect fields",
-			inputBody:           `{"nameeee": "test"}`,
-			mockBehavior:        func(s *mock_repository.MockQuest, quest domain.Quest) {},
+			inputBody:           `{"nameeee": }`,
+			mockBehavior:        func(r *mock_repository.MockQuest, quest domain.Quest) {},
 			expectedStatusCode:  http.StatusBadRequest,
-			expectedRequestBody: `{"error": "invalid request body"}`,
+			expectedRequestBody: `{"error":"invalid request body"}` + "\n",
 		},
 	}
 
@@ -62,7 +63,7 @@ func TestQuestHandler_CreateQuest(t *testing.T) {
 			testCase.mockBehavior(quest, testCase.inputQuest)
 
 			repository := &repository.Repositories{Quest: quest}
-			handler := NewUserHandler(repository)
+			handler := NewQuestHandler(repository)
 
 			rr := httptest.NewRecorder()
 
@@ -71,9 +72,10 @@ func TestQuestHandler_CreateQuest(t *testing.T) {
 			req := httptest.NewRequest(http.MethodPost, "/quest", reqBody)
 
 			// Вызов обработчика с фейковыми объектами http.ResponseWriter и http.Request
-			handler.CreateUser(rr, req)
+			handler.CreateQuest(rr, req)
 
 			assert.Equal(t, testCase.expectedStatusCode, rr.Code)
+			require.Equal(t, testCase.expectedRequestBody, rr.Body.String())
 
 		})
 	}

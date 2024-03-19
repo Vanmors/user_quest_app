@@ -5,6 +5,7 @@
 package mock_service
 
 import (
+	domain "Tasks_Users_Vk_test/internal/domain"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -34,15 +35,15 @@ func (m *MockCompletedQuests) EXPECT() *MockCompletedQuestsMockRecorder {
 }
 
 // CompleteTask mocks base method.
-func (m *MockCompletedQuests) CompleteTask(userID, questID int) error {
+func (m *MockCompletedQuests) CompleteTask(recordCompleted domain.RecordCompleted) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CompleteTask", userID, questID)
+	ret := m.ctrl.Call(m, "CompleteTask", recordCompleted)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // CompleteTask indicates an expected call of CompleteTask.
-func (mr *MockCompletedQuestsMockRecorder) CompleteTask(userID, questID interface{}) *gomock.Call {
+func (mr *MockCompletedQuestsMockRecorder) CompleteTask(recordCompleted interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CompleteTask", reflect.TypeOf((*MockCompletedQuests)(nil).CompleteTask), userID, questID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CompleteTask", reflect.TypeOf((*MockCompletedQuests)(nil).CompleteTask), recordCompleted)
 }

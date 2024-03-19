@@ -1,6 +1,7 @@
 package transport
 
 import (
+	"Tasks_Users_Vk_test/internal/domain"
 	"Tasks_Users_Vk_test/internal/repository"
 	"Tasks_Users_Vk_test/internal/service"
 	"Tasks_Users_Vk_test/pkg/util"
@@ -11,10 +12,10 @@ import (
 
 type CompletedQuestsHandler struct {
 	Repos   *repository.Repositories
-	Service *service.CompletedQuestsService
+	Service *service.Services
 }
 
-func NewCompletedQuestsHandler(repos *repository.Repositories, serv *service.CompletedQuestsService) *CompletedQuestsHandler {
+func NewCompletedQuestsHandler(repos *repository.Repositories, serv *service.Services) *CompletedQuestsHandler {
 	return &CompletedQuestsHandler{
 		Repos:   repos,
 		Service: serv,
@@ -22,14 +23,25 @@ func NewCompletedQuestsHandler(repos *repository.Repositories, serv *service.Com
 }
 
 func (ch *CompletedQuestsHandler) CompleteTask(w http.ResponseWriter, r *http.Request) {
-	type CompletedTask struct {
-		UserID  int `json:"userID"`
-		QuestID int `json:"questID"`
-	}
-	var completedTask CompletedTask
-	json.NewDecoder(r.Body).Decode(&completedTask)
 
-	err := ch.Service.CompleteTask(completedTask.UserID, completedTask.QuestID)
+	var recordCompleted domain.RecordCompleted
+	err := json.NewDecoder(r.Body).Decode(&recordCompleted)
+
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "invalid request body"})
+		return
+	}
+
+	if recordCompleted.UserID == 0 || recordCompleted.QuestID == 0 {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "fields are required"})
+		return
+	}
+
+	err = ch.Service.CompletedQuests.CompleteTask(recordCompleted)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 	}

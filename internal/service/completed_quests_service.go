@@ -1,6 +1,7 @@
 package service
 
 import (
+	"Tasks_Users_Vk_test/internal/domain"
 	"Tasks_Users_Vk_test/internal/repository"
 	"errors"
 )
@@ -15,7 +16,9 @@ func NewCompletedQuestsService(Repos *repository.Repositories) *CompletedQuestsS
 	}
 }
 
-func (cs *CompletedQuestsService) CompleteTask(userID int, questID int) error {
+func (cs *CompletedQuestsService) CompleteTask(recordCompleted domain.RecordCompleted) error {
+	userID := recordCompleted.UserID
+	questID := recordCompleted.QuestID
 
 	haveStages, err := cs.repos.CompletedQuests.HaveStages(userID, questID)
 	if err != nil {
