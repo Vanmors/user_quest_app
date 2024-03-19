@@ -17,15 +17,6 @@ func NewUserHandler(repos *repository.Repositories) *UserHandler {
 	}
 }
 
-// CreateUser создает нового пользователя.
-// @Summary Создание пользователя
-// @Description Создает нового пользователя в системе
-// @Tags users
-// @Accept json
-// @Produce json
-// @Param user body CreateUserRequest true "Данные нового пользователя"
-// @Success 201 {object} UserResponse
-// @Router /users [post]
 func (u *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var user domain.User
 	err := json.NewDecoder(r.Body).Decode(&user)

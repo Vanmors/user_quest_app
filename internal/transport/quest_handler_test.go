@@ -6,7 +6,6 @@ import (
 	mock_repository "Tasks_Users_Vk_test/internal/repository/mocks"
 	"bytes"
 	"github.com/golang/mock/gomock"
-	"github.com/magiconair/properties/assert"
 	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
@@ -74,7 +73,7 @@ func TestQuestHandler_CreateQuest(t *testing.T) {
 			// Вызов обработчика с фейковыми объектами http.ResponseWriter и http.Request
 			handler.CreateQuest(rr, req)
 
-			assert.Equal(t, testCase.expectedStatusCode, rr.Code)
+			require.Equal(t, testCase.expectedStatusCode, rr.Code)
 			require.Equal(t, testCase.expectedRequestBody, rr.Body.String())
 
 		})
