@@ -33,8 +33,6 @@ func (q *QuestHandler) GetQuest(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(cost)
 }
 
-// @Summary CreateQuest
-// @Tags Quest
 func (q *QuestHandler) CreateQuest(w http.ResponseWriter, r *http.Request) {
 	var quest domain.Quest
 	err := json.NewDecoder(r.Body).Decode(&quest)

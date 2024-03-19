@@ -31,8 +31,6 @@ func (u *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(user)
 }
 
-// @Summary CreateUser
-// @Tags User
 func (u *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var user domain.User
 	err := json.NewDecoder(r.Body).Decode(&user)
