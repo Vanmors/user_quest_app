@@ -52,5 +52,5 @@ func main() {
 	router.HandleFunc("/quest/{id:[0-9]+}", handlerQuest.GetQuest).Methods("GET")
 	router.HandleFunc("/complete", handlerCompletedTask.CompleteTask).Methods("POST")
 	router.HandleFunc("/complete/{id:[0-9]+}", handlerCompletedTask.GetCompletedQuestsAndBalance).Methods("GET")
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":8000", router))
 }

@@ -6,7 +6,6 @@ import (
 	"Tasks_Users_Vk_test/internal/service"
 	mock_service "Tasks_Users_Vk_test/internal/service/mocks"
 	"bytes"
-	"fmt"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 	"net/http"
@@ -79,8 +78,6 @@ func TestCompletedQuestsHandler_CompleteTask(t *testing.T) {
 			// Вызов обработчика с фейковыми объектами http.ResponseWriter и http.Request
 			handler.CompleteTask(rr, req)
 
-			fmt.Println("Actual response body:", rr.Body.String())
-			fmt.Println("Expected response body:", testCase.expectedRequestBody)
 			require.Equal(t, testCase.expectedStatusCode, rr.Code)
 			require.Equal(t, testCase.expectedRequestBody, rr.Body.String())
 

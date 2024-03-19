@@ -12,6 +12,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: nav461
       POSTGRES_DB: VK_test_GOPHP
+    hostname: user_quest_app
+    container_name: user_quest_app
+    networks:
+      - my_network
+
   db:
     restart: always
     image: postgres:latest
@@ -23,3 +28,10 @@ services:
       - 5432:5432
     volumes:
       - ./.postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
