@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"Tasks_Users_Vk_test/internal/domain"
+	"Tasks_Users_Vk_test/internal/model"
 	"Tasks_Users_Vk_test/pkg/store"
 	"fmt"
 	"golang.org/x/text/encoding/charmap"
@@ -10,15 +10,15 @@ import (
 //go:generate mockgen -source=repository.go -destination=mocks/mock.go
 
 type User interface {
-	GetUserById(id int) (domain.User, error)
-	CreateUser(user domain.User) error
+	GetUserById(id int) (model.User, error)
+	CreateUser(user model.User) error
 	UpdateBalance(userID int, questCost int) error
 	GetBalance(userID int) (int, error)
 }
 
 type Quest interface {
-	GetQuestById(id int) (domain.Quest, error)
-	CreateQuest(quest domain.Quest) error
+	GetQuestById(id int) (model.Quest, error)
+	CreateQuest(quest model.Quest) error
 	GetCost(questID int) (int, error)
 	GetStages(questID int) (int, error)
 }
@@ -27,7 +27,7 @@ type CompletedQuests interface {
 	HaveStages(userID int, questsID int) (int, error)
 	AddCompletedTask(userID int, questID int) error
 	UpdateStages(userID int, questID int) error
-	GetCompletedQuestsByUserId(userID int) ([]domain.HistoryQuests, error)
+	GetCompletedQuestsByUserId(userID int) ([]model.HistoryQuests, error)
 }
 
 type Repositories struct {

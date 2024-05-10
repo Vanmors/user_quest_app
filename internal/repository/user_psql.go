@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"Tasks_Users_Vk_test/internal/domain"
+	"Tasks_Users_Vk_test/internal/model"
 	"database/sql"
 	"log"
 )
@@ -16,28 +16,28 @@ func NewUserPsql(db *sql.DB) *UserPsql {
 	}
 }
 
-func (u *UserPsql) GetUserById(id int) (domain.User, error) {
+func (u *UserPsql) GetUserById(id int) (model.User, error) {
 	rows, err := u.conn.Query("SELECT * FROM users WHERE id = $1", id)
 
 	if err != nil {
-		return domain.User{}, err
+		return model.User{}, err
 	}
 	defer rows.Close()
 
 	if !rows.Next() {
-		return domain.User{}, sql.ErrNoRows
+		return model.User{}, sql.ErrNoRows
 	}
 
-	user := domain.User{}
+	user := model.User{}
 	err = rows.Scan(&user.Id, &user.Name, &user.Balance)
 	if err != nil {
-		return domain.User{}, err
+		return model.User{}, err
 	}
 
 	return user, nil
 }
 
-func (u *UserPsql) CreateUser(user domain.User) error {
+func (u *UserPsql) CreateUser(user model.User) error {
 	_, err := u.conn.Query("INSERT INTO users (name, balance) VALUES ($1, $2)", user.Name, user.Balance)
 
 	if err != nil {

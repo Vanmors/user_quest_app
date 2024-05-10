@@ -1,4 +1,4 @@
-package domain
+package model
 
 type RecordCompleted struct {
 	UserID  int `json:"userID"`

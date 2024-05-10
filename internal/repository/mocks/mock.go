@@ -5,7 +5,7 @@
 package mock_repository
 
 import (
-	domain "Tasks_Users_Vk_test/internal/domain"
+	domain "Tasks_Users_Vk_test/internal/model"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"

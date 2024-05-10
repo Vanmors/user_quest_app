@@ -1,7 +1,7 @@
 package service
 
 import (
-	"Tasks_Users_Vk_test/internal/domain"
+	"Tasks_Users_Vk_test/internal/model"
 	"Tasks_Users_Vk_test/internal/repository"
 	mock_repository "Tasks_Users_Vk_test/internal/repository/mocks"
 	"github.com/golang/mock/gomock"
@@ -33,7 +33,7 @@ func TestCompletedQuestsService_CompleteTask_Error(t *testing.T) {
 	mockCompletedQuests.EXPECT().AddCompletedTask(gomock.Any(), gomock.Any()).Return(nil)
 
 	// Выполнение тестируемой функции
-	err := service.CompletedQuests.CompleteTask(domain.RecordCompleted{
+	err := service.CompletedQuests.CompleteTask(model.RecordCompleted{
 		UserID:  1,
 		QuestID: 1,
 	})
@@ -66,7 +66,7 @@ func TestCompletedQuestsService_CompleteTask_OK(t *testing.T) {
 	mockCompletedQuests.EXPECT().AddCompletedTask(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 
 	// Выполнение тестируемой функции
-	err := service.CompletedQuests.CompleteTask(domain.RecordCompleted{
+	err := service.CompletedQuests.CompleteTask(model.RecordCompleted{
 		UserID:  1,
 		QuestID: 1,
 	})

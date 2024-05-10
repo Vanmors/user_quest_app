@@ -1,7 +1,7 @@
 package transport
 
 import (
-	"Tasks_Users_Vk_test/internal/domain"
+	"Tasks_Users_Vk_test/internal/model"
 	"Tasks_Users_Vk_test/internal/repository"
 	mock_repository "Tasks_Users_Vk_test/internal/repository/mocks"
 	"bytes"
@@ -13,12 +13,12 @@ import (
 )
 
 func TestUserHandler_CreateUser(t *testing.T) {
-	type mockBehavior func(s *mock_repository.MockUser, user domain.User)
+	type mockBehavior func(s *mock_repository.MockUser, user model.User)
 
 	testTable := []struct {
 		name                string
 		inputBody           string
-		inputUser           domain.User
+		inputUser           model.User
 		mockBehavior        mockBehavior
 		expectedStatusCode  int
 		expectedRequestBody string
@@ -26,11 +26,11 @@ func TestUserHandler_CreateUser(t *testing.T) {
 		{
 			name:      "OK",
 			inputBody: `{"name": "Test", "balance": 1000}`,
-			inputUser: domain.User{
+			inputUser: model.User{
 				Name:    "Test",
 				Balance: 1000,
 			},
-			mockBehavior: func(s *mock_repository.MockUser, user domain.User) {
+			mockBehavior: func(s *mock_repository.MockUser, user model.User) {
 				s.EXPECT().CreateUser(user).Return(nil)
 			},
 			expectedStatusCode:  http.StatusCreated,
@@ -39,14 +39,14 @@ func TestUserHandler_CreateUser(t *testing.T) {
 		{
 			name:                "Empty fields",
 			inputBody:           `{}`,
-			mockBehavior:        func(s *mock_repository.MockUser, user domain.User) {},
+			mockBehavior:        func(s *mock_repository.MockUser, user model.User) {},
 			expectedStatusCode:  http.StatusBadRequest,
 			expectedRequestBody: `{"error":"fields are required"}` + "\n",
 		},
 		{
 			name:                "Incorrect fields",
 			inputBody:           `{"n": }`,
-			mockBehavior:        func(s *mock_repository.MockUser, user domain.User) {},
+			mockBehavior:        func(s *mock_repository.MockUser, user model.User) {},
 			expectedStatusCode:  http.StatusBadRequest,
 			expectedRequestBody: `{"error":"invalid request body"}` + "\n",
 		},

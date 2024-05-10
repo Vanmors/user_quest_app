@@ -1,7 +1,7 @@
 package transport
 
 import (
-	"Tasks_Users_Vk_test/internal/domain"
+	"Tasks_Users_Vk_test/internal/model"
 	"Tasks_Users_Vk_test/internal/repository"
 	"encoding/json"
 	"log"
@@ -19,7 +19,7 @@ func NewQuestHandler(repos *repository.Repositories) *QuestHandler {
 }
 
 func (q *QuestHandler) CreateQuest(w http.ResponseWriter, r *http.Request) {
-	var quest domain.Quest
+	var quest model.Quest
 	err := json.NewDecoder(r.Body).Decode(&quest)
 
 	if err != nil {

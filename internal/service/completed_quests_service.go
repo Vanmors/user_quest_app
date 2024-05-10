@@ -1,7 +1,7 @@
 package service
 
 import (
-	"Tasks_Users_Vk_test/internal/domain"
+	"Tasks_Users_Vk_test/internal/model"
 	"Tasks_Users_Vk_test/internal/repository"
 	"errors"
 )
@@ -16,7 +16,7 @@ func NewCompletedQuestsService(Repos *repository.Repositories) *CompletedQuestsS
 	}
 }
 
-func (cs *CompletedQuestsService) CompleteTask(recordCompleted domain.RecordCompleted) error {
+func (cs *CompletedQuestsService) CompleteTask(recordCompleted model.RecordCompleted) error {
 	userID := recordCompleted.UserID
 	questID := recordCompleted.QuestID
 

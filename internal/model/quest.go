@@ -1,4 +1,4 @@
-package domain
+package model
 
 type Quest struct {
 	Id     int

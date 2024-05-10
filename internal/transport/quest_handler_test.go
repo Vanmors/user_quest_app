@@ -1,7 +1,7 @@
 package transport
 
 import (
-	"Tasks_Users_Vk_test/internal/domain"
+	"Tasks_Users_Vk_test/internal/model"
 	"Tasks_Users_Vk_test/internal/repository"
 	mock_repository "Tasks_Users_Vk_test/internal/repository/mocks"
 	"bytes"
@@ -13,12 +13,12 @@ import (
 )
 
 func TestQuestHandler_CreateQuest(t *testing.T) {
-	type mockBehavior func(r *mock_repository.MockQuest, quest domain.Quest)
+	type mockBehavior func(r *mock_repository.MockQuest, quest model.Quest)
 
 	testTable := []struct {
 		name                string
 		inputBody           string
-		inputQuest          domain.Quest
+		inputQuest          model.Quest
 		mockBehavior        mockBehavior
 		expectedStatusCode  int
 		expectedRequestBody string
@@ -26,12 +26,12 @@ func TestQuestHandler_CreateQuest(t *testing.T) {
 		{
 			name:      "OK",
 			inputBody: `{"name": "TestQuest", "cost": 1000, "stages": 2}`,
-			inputQuest: domain.Quest{
+			inputQuest: model.Quest{
 				Name:   "TestQuest",
 				Cost:   1000,
 				Stages: 2,
 			},
-			mockBehavior: func(r *mock_repository.MockQuest, quest domain.Quest) {
+			mockBehavior: func(r *mock_repository.MockQuest, quest model.Quest) {
 				r.EXPECT().CreateQuest(quest).Return(nil)
 			},
 			expectedStatusCode:  http.StatusCreated,
@@ -40,14 +40,14 @@ func TestQuestHandler_CreateQuest(t *testing.T) {
 		{
 			name:                "Empty fields",
 			inputBody:           `{}`,
-			mockBehavior:        func(r *mock_repository.MockQuest, quest domain.Quest) {},
+			mockBehavior:        func(r *mock_repository.MockQuest, quest model.Quest) {},
 			expectedStatusCode:  http.StatusBadRequest,
 			expectedRequestBody: `{"error":"fields are required"}` + "\n",
 		},
 		{
 			name:                "Incorrect fields",
 			inputBody:           `{"nameeee": }`,
-			mockBehavior:        func(r *mock_repository.MockQuest, quest domain.Quest) {},
+			mockBehavior:        func(r *mock_repository.MockQuest, quest model.Quest) {},
 			expectedStatusCode:  http.StatusBadRequest,
 			expectedRequestBody: `{"error":"invalid request body"}` + "\n",
 		},

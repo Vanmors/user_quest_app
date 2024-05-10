@@ -1,7 +1,7 @@
 package transport
 
 import (
-	"Tasks_Users_Vk_test/internal/domain"
+	"Tasks_Users_Vk_test/internal/model"
 	"Tasks_Users_Vk_test/internal/repository"
 	"encoding/json"
 	"net/http"
@@ -18,7 +18,7 @@ func NewUserHandler(repos *repository.Repositories) *UserHandler {
 }
 
 func (u *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
-	var user domain.User
+	var user model.User
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")

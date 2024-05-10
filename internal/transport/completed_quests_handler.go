@@ -1,7 +1,7 @@
 package transport
 
 import (
-	"Tasks_Users_Vk_test/internal/domain"
+	"Tasks_Users_Vk_test/internal/model"
 	"Tasks_Users_Vk_test/internal/repository"
 	"Tasks_Users_Vk_test/internal/service"
 	"Tasks_Users_Vk_test/pkg/util"
@@ -24,7 +24,7 @@ func NewCompletedQuestsHandler(repos *repository.Repositories, serv *service.Ser
 
 func (ch *CompletedQuestsHandler) CompleteTask(w http.ResponseWriter, r *http.Request) {
 
-	var recordCompleted domain.RecordCompleted
+	var recordCompleted model.RecordCompleted
 	err := json.NewDecoder(r.Body).Decode(&recordCompleted)
 
 	if err != nil {

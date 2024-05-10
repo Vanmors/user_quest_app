@@ -1,7 +1,7 @@
 package transport
 
 import (
-	"Tasks_Users_Vk_test/internal/domain"
+	"Tasks_Users_Vk_test/internal/model"
 	repository2 "Tasks_Users_Vk_test/internal/repository"
 	"Tasks_Users_Vk_test/internal/service"
 	mock_service "Tasks_Users_Vk_test/internal/service/mocks"
@@ -14,12 +14,12 @@ import (
 )
 
 func TestCompletedQuestsHandler_CompleteTask(t *testing.T) {
-	type mockBehavior func(s *mock_service.MockCompletedQuests, record domain.RecordCompleted)
+	type mockBehavior func(s *mock_service.MockCompletedQuests, record model.RecordCompleted)
 
 	testTable := []struct {
 		name                string
 		inputBody           string
-		inputRecord         domain.RecordCompleted
+		inputRecord         model.RecordCompleted
 		mockBehavior        mockBehavior
 		expectedStatusCode  int
 		expectedRequestBody string
@@ -27,12 +27,12 @@ func TestCompletedQuestsHandler_CompleteTask(t *testing.T) {
 		{
 			name:      "OK",
 			inputBody: `{"userID": 1, "questID": 1}`,
-			inputRecord: domain.RecordCompleted{
+			inputRecord: model.RecordCompleted{
 				UserID:  1,
 				QuestID: 1,
 			},
-			mockBehavior: func(s *mock_service.MockCompletedQuests, record domain.RecordCompleted) {
-				s.EXPECT().CompleteTask(domain.RecordCompleted{
+			mockBehavior: func(s *mock_service.MockCompletedQuests, record model.RecordCompleted) {
+				s.EXPECT().CompleteTask(model.RecordCompleted{
 					UserID:  1,
 					QuestID: 1,
 				}).Return(nil)
@@ -43,14 +43,14 @@ func TestCompletedQuestsHandler_CompleteTask(t *testing.T) {
 		{
 			name:                "Empty fields",
 			inputBody:           `{}`,
-			mockBehavior:        func(s *mock_service.MockCompletedQuests, record domain.RecordCompleted) {},
+			mockBehavior:        func(s *mock_service.MockCompletedQuests, record model.RecordCompleted) {},
 			expectedStatusCode:  http.StatusBadRequest,
 			expectedRequestBody: `{"error":"fields are required"}` + "\n",
 		},
 		{
 			name:                "Incorrect fields",
 			inputBody:           `{"n": }`,
-			mockBehavior:        func(s *mock_service.MockCompletedQuests, record domain.RecordCompleted) {},
+			mockBehavior:        func(s *mock_service.MockCompletedQuests, record model.RecordCompleted) {},
 			expectedStatusCode:  http.StatusBadRequest,
 			expectedRequestBody: `{"error":"invalid request body"}` + "\n",
 		},

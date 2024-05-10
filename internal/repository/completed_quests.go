@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"Tasks_Users_Vk_test/internal/domain"
+	"Tasks_Users_Vk_test/internal/model"
 	"database/sql"
 	"log"
 )
@@ -46,8 +46,8 @@ func (c *CompletedQuestsPsql) AddCompletedTask(userID int, questID int) error {
 	return err
 }
 
-func (c *CompletedQuestsPsql) GetCompletedQuestsByUserId(userID int) ([]domain.HistoryQuests, error) {
-	var historyQuests []domain.HistoryQuests
+func (c *CompletedQuestsPsql) GetCompletedQuestsByUserId(userID int) ([]model.HistoryQuests, error) {
+	var historyQuests []model.HistoryQuests
 
 	rows, err := c.conn.Query("SELECT c.user_id, c.quest_id, c.Stages, c.completion_date, q.Name AS QuestName, q.Cost FROM completed_quests c JOIN quest q ON c.quest_id = q.id WHERE c.user_id = $1 ORDER BY c.completion_date DESC", userID)
 	if err != nil {
@@ -57,7 +57,7 @@ func (c *CompletedQuestsPsql) GetCompletedQuestsByUserId(userID int) ([]domain.H
 
 	// Итерируем по результатам запроса и добавляем выполненные задания в список
 	for rows.Next() {
-		var historyQuest domain.HistoryQuests
+		var historyQuest model.HistoryQuests
 		if err := rows.Scan(&historyQuest.UserID, &historyQuest.QuestID, &historyQuest.Stages,
 			&historyQuest.CompletionDate, &historyQuest.QuestName, &historyQuest.Cost); err != nil {
 			return nil, err
