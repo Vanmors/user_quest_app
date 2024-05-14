@@ -3,7 +3,6 @@ package repository
 import (
 	"Tasks_Users_Vk_test/internal/model"
 	"database/sql"
-	"log"
 )
 
 type QuestPsql struct {
@@ -34,14 +33,14 @@ func (q *QuestPsql) GetQuestById(id int) (model.Quest, error) {
 		return model.Quest{}, err
 	}
 
-	return quest, err
+	return quest, nil
 }
 
 func (q *QuestPsql) CreateQuest(quest model.Quest) error {
 	_, err := q.conn.Query("INSERT INTO quest (name, cost, stages) VALUES ($1, $2, $3)", quest.Name, quest.Cost, quest.Stages)
 
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	return nil
 }

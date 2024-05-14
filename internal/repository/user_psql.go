@@ -3,7 +3,6 @@ package repository
 import (
 	"Tasks_Users_Vk_test/internal/model"
 	"database/sql"
-	"log"
 )
 
 type UserPsql struct {
@@ -41,9 +40,9 @@ func (u *UserPsql) CreateUser(user model.User) error {
 	_, err := u.conn.Query("INSERT INTO users (name, balance) VALUES ($1, $2)", user.Name, user.Balance)
 
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
-	return err
+	return nil
 }
 
 func (u *UserPsql) UpdateBalance(userID int, questCost int) error {

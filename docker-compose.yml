@@ -3,7 +3,7 @@ version: '3.9'
 services:
   user_quest_app:
     build: ./
-    command: ./user_quest_app
+    command: ./wait-for-postgres.sh db ./user_quest_app
     ports:
       - 8000:8000
     depends_on:

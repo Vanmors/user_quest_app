@@ -3,7 +3,6 @@ package repository
 import (
 	"Tasks_Users_Vk_test/internal/model"
 	"database/sql"
-	"log"
 )
 
 type CompletedQuestsPsql struct {
@@ -41,7 +40,7 @@ func (c *CompletedQuestsPsql) AddCompletedTask(userID int, questID int) error {
 	_, err := c.conn.Query("INSERT INTO completed_quests (user_id, quest_id, stages) VALUES ($1, $2, 1)", userID, questID)
 
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	return err
 }
